@@ -10,9 +10,9 @@ const jsPsych = initJsPsych({
 // =========================================================================
 
 const PARAMS = {
-    num_blocks: 24,
-    trials_per_block: 24,
-    num_old_configs: 12,
+    num_blocks: 20,
+    trials_per_block: 10,
+    num_old_configs: 5,
     set_size: 12,
     
     target_char: 'T',
