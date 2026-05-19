@@ -10,7 +10,7 @@ const jsPsych = initJsPsych({
 // =========================================================================
 
 const PARAMS = {
-    num_blocks: 20,
+    num_blocks: 24,
     trials_per_block: 10,
     num_old_configs: 5,
     set_size: 12,
@@ -20,8 +20,8 @@ const PARAMS = {
     
     grid_rows: 8,
     grid_cols: 8,
-    cell_size: 75, // Perfekte Größe für alle Bildschirme (kein Scrollen)
-    font_size: 50, // Groß, aber mit genug Abstand zum Rand der Zelle
+    cell_size: 75, 
+    font_size: 50, 
     
     fixation_duration: 500,
     feedback_duration: 400,
@@ -74,7 +74,7 @@ for (let i = 0; i < PARAMS.num_old_configs; i++) {
 // =========================================================================
 const timeline = [];
 
-// Vollbildmodus starten (Verhindert Ablenkungen und garantiert Platz)
+// Vollbildmodus starten 
 timeline.push({
     type: jsPsychFullscreen,
     fullscreen_mode: true,
@@ -194,7 +194,7 @@ for (let block_num = 0; block_num < PARAMS.num_blocks; block_num++) {
     });
 }
 
-// ✨ Änderung: Das Experiment beendet sich nach 3 Sekunden automatisch und löst den Download aus!
+//Das Experiment beendet sich nach 3 Sekunden automatisch und löst den Download aus!
 timeline.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<h1>Experiment beendet</h1>
