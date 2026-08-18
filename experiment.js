@@ -194,14 +194,23 @@ for (let block_num = 0; block_num < PARAMS.num_blocks; block_num++) {
     });
 }
 
-//Das Experiment beendet sich nach 3 Sekunden automatisch und löst den Download aus!
+// ALT:
+// timeline.push({
+//     type: jsPsychHtmlKeyboardResponse,
+//     stimulus: `<h1>Experiment beendet</h1>
+//                <p>Vielen Dank für Ihre Teilnahme!</p>
+//                <p>Die Datendatei wird nun automatisch heruntergeladen.</p>`,
+//     choices: "NO_KEYS",
+//     trial_duration: 3000 
+// });
+
+// NEU:
 timeline.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<h1>Experiment beendet</h1>
                <p>Vielen Dank für Ihre Teilnahme!</p>
-               <p>Die Datendatei wird nun automatisch heruntergeladen.</p>`,
-    choices: "NO_KEYS",
-    trial_duration: 3000 
+               <p>Ihre Daten wurden erfolgreich gespeichert. Sie können das Fenster jetzt schließen.</p>`,
+    choices: "NO_KEYS"
 });
 
 jsPsych.run(timeline);
