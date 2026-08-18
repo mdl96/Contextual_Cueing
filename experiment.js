@@ -1,9 +1,42 @@
-// Initialisiere jsPsych
+// =========================================================================
+// ## DATAPIPE & JSPSYCH INITIALISIERUNG
+// =========================================================================
+
+const DATAPIPE_EXPERIMENT_ID = "hBViZ5M5olKS"; 
+
+// 1. Initialisiere jsPsych zuerst
 const jsPsych = initJsPsych({
     on_finish: function() {
-        jsPsych.data.get().localSave('csv', 'contextual_cueing_data.csv');
+        // Datenübertragung an DataPipe beim Beenden
+        const csvData = jsPsych.data.get().csv();
+        const filename = `cc_subject_${participant_id}.csv`;
+
+        fetch("https://pipe.jspsych.org/api/data/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({
+                experimentID: DATAPIPE_EXPERIMENT_ID,
+                filename: filename,
+                data: csvData
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Daten erfolgreich an DataPipe gesendet!");
+            } else {
+                console.error("Fehler beim Upload zu DataPipe.");
+            }
+        })
+        .catch(error => console.error("Netzwerkfehler:", error));
     }
 });
+
+// 2. Erstelle die Probanden-ID und füge sie den Daten hinzu
+const participant_id = jsPsych.randomization.randomID(8);
+jsPsych.data.addProperties({ participant_id: participant_id });
 
 // =========================================================================
 // ## 1. EXPERIMENT-PARAMETER
@@ -194,17 +227,7 @@ for (let block_num = 0; block_num < PARAMS.num_blocks; block_num++) {
     });
 }
 
-// ALT:
-// timeline.push({
-//     type: jsPsychHtmlKeyboardResponse,
-//     stimulus: `<h1>Experiment beendet</h1>
-//                <p>Vielen Dank für Ihre Teilnahme!</p>
-//                <p>Die Datendatei wird nun automatisch heruntergeladen.</p>`,
-//     choices: "NO_KEYS",
-//     trial_duration: 3000 
-// });
-
-// NEU:
+// Endbildschirm
 timeline.push({
     type: jsPsychHtmlKeyboardResponse,
     stimulus: `<h1>Experiment beendet</h1>
