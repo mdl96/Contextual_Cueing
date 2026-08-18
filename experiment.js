@@ -164,10 +164,8 @@ for (let block_num = 0; block_num < PARAMS.num_blocks; block_num++) {
                 const total_width = PARAMS.grid_cols * PARAMS.cell_size;
                 const total_height = PARAMS.grid_rows * PARAMS.cell_size;
                 
-                // Haupt-Container: Zentriert und genau in der Größe des Rasters
                 let html = `<div class="search-container" style="position: relative; width: ${total_width}px; height: ${total_height}px; margin: 0 auto;">`;
                 
-                // Hilfsfunktion: Zentriert die Buchstaben exakt in ihrer Zelle, verhindert Überschneidungen
                 const get_style = (x, y, rotation) => {
                     return `position: absolute; left: 50%; top: 50%; 
                             width: ${PARAMS.cell_size}px; height: ${PARAMS.cell_size}px; 
@@ -177,11 +175,9 @@ for (let block_num = 0; block_num < PARAMS.num_blocks; block_num++) {
                             transform: translate(${x}px, ${y}px) rotate(${rotation}deg);`;
                 };
 
-                // Zielreiz (T) einfügen
                 let target_style = get_style(config.positions[0][0], config.positions[0][1], config.target_rotation);
                 html += `<div style="${target_style}">${PARAMS.target_char}</div>`;
                 
-                // Ablenker (L) einfügen
                 for (let i = 1; i < PARAMS.set_size; i++) {
                     let distractor_style = get_style(config.positions[i][0], config.positions[i][1], config.distractor_rotations[i-1]);
                     html += `<div style="${distractor_style}">${PARAMS.distractor_char}</div>`;
