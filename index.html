@@ -1,53 +1,21 @@
-// ALT:
-// const jsPsych = initJsPsych({
-//     on_finish: function() {
-//         jsPsych.data.get().localSave('csv', 'contextual_cueing_data.csv');
-//     }
-// });
-
-// NEU:
-const DATAPIPE_EXPERIMENT_ID = "hBViZ5M5olKS"; 
-const participant_id = jsPsych.randomization.randomID(8);
-
-const jsPsych = initJsPsych({
-    on_finish: function() {
-        // Datenübertragung an DataPipe
-        const csvData = jsPsych.data.get().csv();
-        const filename = `cc_subject_${participant_id}.csv`;
-
-        fetch("https://pipe.jspsych.org/api/data/", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            },
-            body: JSON.stringify({
-                experimentID: DATAPIPE_EXPERIMENT_ID,
-                filename: filename,
-                data: csvData
-            })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log("Daten erfolgreich an DataPipe gesendet!");
-            } else {
-                console.error("Fehler beim Upload zu DataPipe.");
-            }
-        })
-        .catch(error => console.error("Netzwerkfehler:", error));
-    }
-});
-
-// Probanden-ID zu allen gespeicherten Datenzeilen hinzufügen
-jsPsych.data.addProperties({ participant_id: participant_id });
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <title>Contextual Cueing Experiment</title>
     
+    <!-- jsPsych Bibliothek & Plugins -->
+    <script src="jspsych/jspsych.js"></script>
     <script src="jspsych/plugin-html-keyboard-response.js"></script>
     <script src="jspsych/plugin-fullscreen.js"></script>
     <script src="jspsych/plugin-visual-search-circle.js"></script>
     
+    <!-- CSS Stylesheets -->
     <link rel="stylesheet" href="jspsych/jspsych.css">
     <link rel="stylesheet" href="style.css">
   </head>
   <body></body>
+  
+  <!-- Haupt-Skript laden -->
   <script src="experiment.js"></script>
 </html>
