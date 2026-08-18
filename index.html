@@ -1,129 +1,16 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <title>Contextual Cueing Experiment</title>
-  <!-- jsPsych Bibliothek & CSS -->
-  <script src="https://unpkg.com/jspsych@7.3.3"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@1.1.2"></script>
-  <script src="https://unpkg.com/@jspsych/plugin-instructions@1.1.2"></script>
-  <link href="https://unpkg.com/jspsych@7.3.3/css/jspsych.css" rel="stylesheet" type="text/css" />
-  
-  <style>
-    .stimulus {
-      font-size: 3rem;
-      font-weight: bold;
-      font-family: Arial, sans-serif;
-    }
-  </style>
-</head>
-<body>
-</body>
-<script>
-  // ==========================================
-  // 1. DATAPIPE KONFIGURATION
-  // Ersetze diesen Wert mit deiner Experiment ID aus DataPipe
-  // ==========================================
-  const DATAPIPE_EXPERIMENT_ID = "hBViZ5M5olKS";
-
-  // Eindeutige Probanden-ID & Dateiname generieren
-  const participant_id = jsPsych.randomization.randomID(8);
-  const filename = `cc_data_${participant_id}.csv`;
-
-  // ==========================================
-  // 2. JSPSYCH INITIALISIERUNG
-  // ==========================================
-  const jsPsych = initJsPsych({
-    on_finish: function() {
-      // Zeige Hinweis während des Uploads
-      document.body.innerHTML = '<h2>Vielen Dank! Deine Daten werden online gespeichert...</h2>';
-
-      // Rohdaten als CSV holen
-      const csvData = jsPsych.data.get().csv();
-
-      // Senden der Daten an DataPipe
-      fetch("https://pipe.jspsych.org/api/data/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify({
-          experimentID: DATAPIPE_EXPERIMENT_ID,
-          filename: filename,
-          data: csvData
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          document.body.innerHTML = '<h2>Daten erfolgreich gespeichert! Das Experiment ist beendet.</h2>';
-        } else {
-          document.body.innerHTML = '<h2>Fehler beim Speichern der Daten. Bitte wende dich an den Versuchsleiter.</h2>';
-        }
-      })
-      .catch(error => {
-        console.error("Netzwerkfehler:", error);
-        document.body.innerHTML = '<h2>Netzwerkfehler beim Übertragen der Daten.</h2>';
-      });
-    }
-  });
-
-  // Speichere die Probanden-ID in allen Datenzeilen
-  jsPsych.data.addProperties({ participant_id: participant_id });
-
-  // ==========================================
-  // 3. TIMELINE & STIMULI (Contextual Cueing)
-  // ==========================================
-  const timeline = [];
-
-  // Instruktionen
-  const instructions = {
-    type: jsPsychInstructions,
-    pages: [
-      '<h1>Willkommen zum Experiment</h1><p>Suche so schnell und genau wie möglich nach dem Zielreiz <strong>T</strong>.</p>',
-      '<p>Drücke die Taste <strong>F</strong>, wenn das T nach <strong>LINKS</strong> zeigt.<br>Drücke die Taste <strong>J</strong>, wenn das T nach <strong>RECHTS</strong> zeigt.</p><p>Klicke auf Weiter, um zu starten.</p>'
-    ],
-    show_clickable_nav: true
-  };
-  timeline.push(instructions);
-
-  // Fixationskreuz
-  const fixation = {
-    type: jsPsychHtmlKeyboardResponse,
-    stimulus: '<div class="stimulus">+</div>',
-    choices: "NO_KEYS",
-    trial_duration: 500
-  };
-
-  // Beispiel-Stimuli (Wiederholte vs. Neue Konfigurationen)
-  const trials_config = [
-    { condition: 'repeated', target_orientation: 'left', stimulus_html: '<div class="stimulus" style="letter-spacing: 20px;">L L L <span style="display:inline-block; transform:rotate(-90deg);">T</span> L L</div>' },
-    { condition: 'novel',    target_orientation: 'right', stimulus_html: '<div class="stimulus" style="letter-spacing: 20px;">L L <span style="display:inline-block; transform:rotate(90deg);">T</span> L L L</div>' }
-  ];
-
-  // Durchläufe (Trials) bauen
-  for (let i = 0; i < trials_config.length; i++) {
-    timeline.push(fixation);
-
-    const trial = {
-      type: jsPsychHtmlKeyboardResponse,
-      stimulus: trials_config[i].stimulus_html,
-      choices: ['f', 'j'],
-      data: {
-        task: 'response',
-        condition: trials_config[i].condition,
-        target_orientation: trials_config[i].target_orientation
-      },
-      on_finish: function(data) {
-        // Richtigkeit der Antwort prüfen (f = left, j = right)
-        const expected_key = (data.target_orientation === 'left') ? 'f' : 'j';
-        data.correct = jsPsych.pluginAPI.compareKeys(data.response, expected_key);
-      }
-    };
-    timeline.push(trial);
-  }
-
-  // Experiment ausführen
-  jsPsych.run(timeline);
-</script>
+<html>
+  <head>
+    <title>Contextual Cueing Experiment</title>
+    <script src="jspsych/jspsych.js"></script>
+    
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-fullscreen.js"></script>
+    <script src="jspsych/plugin-visual-search-circle.js"></script>
+    
+    <link rel="stylesheet" href="jspsych/jspsych.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body></body>
+  <script src="experiment.js"></script>
 </html>
