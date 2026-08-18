@@ -6,7 +6,7 @@
 // });
 
 // NEU:
-const DATAPIPE_EXPERIMENT_ID = "hBViZ5M5olKS";
+const DATAPIPE_EXPERIMENT_ID = "hBViZ5M5olKS"; 
 const participant_id = jsPsych.randomization.randomID(8);
 
 const jsPsych = initJsPsych({
@@ -40,3 +40,14 @@ const jsPsych = initJsPsych({
 
 // Probanden-ID zu allen gespeicherten Datenzeilen hinzufügen
 jsPsych.data.addProperties({ participant_id: participant_id });
+    
+    <script src="jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="jspsych/plugin-fullscreen.js"></script>
+    <script src="jspsych/plugin-visual-search-circle.js"></script>
+    
+    <link rel="stylesheet" href="jspsych/jspsych.css">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body></body>
+  <script src="experiment.js"></script>
+</html>
