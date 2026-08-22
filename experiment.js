@@ -43,7 +43,7 @@ jsPsych.data.addProperties({ participant_id: participant_id });
 // =========================================================================
 
 const PARAMS = {
-    num_blocks: 24,
+    num_blocks: 12,
     trials_per_block: 10,
     num_old_configs: 5,
     set_size: 12,
